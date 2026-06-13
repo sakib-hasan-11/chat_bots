@@ -2,10 +2,11 @@
 __pycache__/
 *.py[codz]
 *$py.class
-
+chatbot_strategy.md
 # C extensions
 *.so
-
+.vscode
+core_practise
 # Distribution / packaging
 .Python
 build/
