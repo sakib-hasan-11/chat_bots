@@ -8,6 +8,7 @@ load_dotenv()
 
 
 class MySQLService:
+    
     DEFAULT_CONVERSATION_TITLE = "Default Chat"
 
     def __init__(self):
@@ -30,13 +31,18 @@ class MySQLService:
         except Error as e:
             print(f" MySQL Connection Error: {e}")
 
+    
     def close(self):
         self.cursor.close()
         self.connection.close()
 
+    
+    
     def commit(self):
         self.connection.commit()
 
+    
+    
     def create_user_if_not_exists(self, user_id: str):
 
         query = """
@@ -63,6 +69,9 @@ class MySQLService:
 
         return self.cursor.lastrowid
 
+    
+    
+    
     def get_or_create_active_conversation(
         self,
         user_db_id: int,
@@ -107,6 +116,10 @@ class MySQLService:
 
         return self.cursor.lastrowid
 
+    
+    
+    
+    
     def save_message(
         self,
         conversation_id: int,

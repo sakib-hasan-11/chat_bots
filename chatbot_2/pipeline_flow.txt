@@ -1,0 +1,42 @@
+step 1 
+core/
+    mysql_loader.py
+
+    connect with mysql
+
+    def close(self):
+
+    def commit(self):
+
+    def create_user_if_not_exists(self, user_id: str) => create user unique id in db if not exist
+
+    def get_or_create_active_conversation(self,user_db_id: int,): create a conversation_id for each user.
+
+    def save_message(self,conversation_id: int,role: str,content: str,): save message to this conversation_id session.
+
+
+step 2 
+services/
+    chat_services.py === add mysql database in it .
+
+    ->initialize_chat
+
+    ->save_user_message_redis
+
+    ->create_user_if_not_exists(user_id: str)
+
+    ->get_or_create_active_conversation()
+
+    ->mysql.save_message(conversation_id, "user", user_input)
+
+    ->load_recent_history(user_id) == load lst 5-10 message
+
+    ->build_langchain_messages(history) == add history + system prompt 
+
+    ->await llm.ainvoke(messages)
+
+    ->save_ai_message_redis == add one new message
+
+    ->redis_client.ltrim(f"chat_{user_id}", -21, -1) = delete the old 1 message
+
+    ->mysql.save_message(conversation_id, "assistant", response.content)=save raw llm response

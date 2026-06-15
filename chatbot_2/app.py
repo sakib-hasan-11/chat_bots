@@ -3,62 +3,76 @@ import os
 import requests
 import streamlit as st
 from dotenv import load_dotenv
-from services.redis_services import (
-    initialize_chat,
-    load_history,
-    load_redis_client,
-    save_ai_message,
-    save_user_message,
-)
 
-redis_client = load_redis_client()
+# Config
+
+
 load_dotenv()
+user_id = "sakib_hasan"
 API_URL = os.getenv("API_URL")
+CHAT_URL = f"{API_URL}/chat/message"
+HISTORY_URL = f"{API_URL}/chat/history/{user_id}"
 
 
-st.set_page_config(page_title="chatbot", layout="centered")
-
-user_id = "user_123"
+st.set_page_config(page_title="Chatbot", layout="centered")
 
 
-initialize_chat(user_id)
+# Load history ONLY ONCE
 
 
-# load past 20 chat
-histry = load_history(user_id=user_id, limit=20)
-
-if len(histry) != 0:
-    for msg in histry:
-        if msg["role"] == "system":
-            continue
-
-        elif msg["role"] == "user":
-            with st.chat_message("user"):
-                st.write(msg["content"])
-
-        elif msg["role"] == "assistant":
-            with st.chat_message("assistant"):
-                st.write(msg["content"])
+history = requests.get(HISTORY_URL).json()
 
 
-user_input = st.chat_input(placeholder="user input")
+if "messages" not in st.session_state:
+    st.session_state.messages = history
+
+
+# Display history chat
+
+
+for msg in st.session_state.messages:
+    if msg["role"] == "system":
+        continue
+
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
+
+
+# Chat Input
+
+
+user_input = st.chat_input("Type your message...")
 
 if user_input:
-    with st.chat_message(name="user"):
-        st.write(user_input)
-        save_user_message(user_id=user_id, user_query=user_input)
+    # Show user instantly
 
-    # this template match the api endpoint input validation schema .
+    user_message = {"role": "user", "content": user_input}
+
+    st.session_state.messages.append(user_message)
+
+    with st.chat_message("user"):
+        st.write(user_input)
+
+    # Assistant
+
     payload = {"user_id": user_id, "message": user_input}
 
-    with st.chat_message(name="assistant"):
-        with st.spinner("thinking... "):
-            response = requests.post(url=API_URL, json=payload)
-            assistant_reply = response.json()["response"]
-        st.write(assistant_reply)
-    save_ai_message(ai_response=assistant_reply, user_id=user_id)
+    with st.chat_message("assistant"):
+        placeholder = st.empty()
 
-    redis_client.ltrim(f"chat_{user_id}", -21, -1)
+        placeholder.markdown("Thinking...**")
+
+        response = requests.post(CHAT_URL, json=payload)
+
+        assistant_reply = response.json()["response"]
+
+        placeholder.empty()
+
+        st.write(assistant_reply)
+
+    assistant_message = {"role": "assistant", "content": assistant_reply}
+
+    st.session_state.messages.append(assistant_message)
 
 
 # uvicorn main:app --reload
