@@ -1,0 +1,49 @@
+Step 1
+schema/
+    fact_schema.py
+
+Step 2
+utils/
+    fact_prompt_builder.py
+
+
+Step 3
+Extend redis_services.py
+
+    save_fact_memory()
+
+    load_fact_memory()
+
+    delete_fact_memory()
+
+Step 4
+Extend mysql_loader.py
+
+    count_user_messages()
+
+    get_recent_user_messages()
+
+    save_fact_version()
+
+    load_latest_fact_version()
+
+
+Step 5
+services/
+
+long_term_memory_service.py
+
+    class LongTermMemoryService
+    
+
+Step 6
+
+Modify  chat_services.py
+
+Add only
+
+    await long_term_memory_service.update_memory(
+        user_id,
+        conversation_id
+    )
+
