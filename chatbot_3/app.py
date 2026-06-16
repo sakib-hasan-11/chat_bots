@@ -8,14 +8,14 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
-user_id = "sakib_hasan"
+user_id = "jack_sparrow"
 API_URL = os.getenv("API_URL")
 CHAT_URL = f"{API_URL}/chat/message"
 HISTORY_URL = f"{API_URL}/chat/history/{user_id}"
 
 
 st.set_page_config(page_title="Chatbot", layout="centered")
-
+st.title('AGENTIC CHATBOT WITH LONG CONTEXT MEMORY')
 
 # Load history ONLY ONCE
 

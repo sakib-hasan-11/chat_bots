@@ -1,0 +1,62 @@
+core /
+    embedding_loader.py
+
+
+utils/
+    facts_to_text.py
+
+
+
+services/
+    PineconeService.py
+        class PineconeService:
+
+            def archive_fact_memory() - sent old fact vectors to pinecone
+
+            def search_memory() - get the best matched vectores 
+
+            def delete_user_namespace() - delte if no need any more
+
+services/
+    needs_long_term_memory
+    
+    def _should_archive_to_pinecone -- check weather the fact table is created or null . if null return back.
+
+    def _should_archive_to_pinecone -- if need to update then upload the old facts to pinecone .
+
+
+
+utils/
+    memory_prototypes.py   -- list of prototypes questions.
+
+
+services/
+    redis_services.py
+
+    def save_prototype_embeddings - save to redis if protopytes embeddings are not saved into redis
+
+    def load_prototype_embeddings(): -- load embeddings from redis to RAM and use super fast.
+
+
+services/
+    prototype_classifier.py
+
+    class PrototypeClassifier
+
+    __init__()
+
+    needs_long_term_memory()
+
+    _embed_query()
+
+    _calculate_similarity()     
+
+
+services/
+    chat_services.py
+
+    add the retrival from pinecone . 
+    
+    change the langchain prompt and add the retrival into the prompt
+
+    then invoke to llm

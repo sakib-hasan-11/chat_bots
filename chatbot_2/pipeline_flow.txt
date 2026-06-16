@@ -15,7 +15,21 @@ core/
     def save_message(self,conversation_id: int,role: str,content: str,): save message to this conversation_id session.
 
 
-step 2 
+step 2
+schema/
+    request.py = validate message before sent to llm 
+    response.py = validate llm response before sent to user ui
+
+routers/
+    message routes = invoke llm and bring llm response
+    history routes = bring redis history 
+
+main/
+    add the routers
+
+
+
+step 3 
 services/
     chat_services.py === add mysql database in it .
 

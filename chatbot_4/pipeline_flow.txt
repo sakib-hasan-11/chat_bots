@@ -1,0 +1,55 @@
+Step 1
+core/
+    embedding_loader.py == load embedding model once and return model.
+
+
+Step 2
+utils/
+    fact_to_text.py == redis fact table to embedding friendly text
+
+
+Step 3
+services/
+    pinecone_services.py
+
+    class PineconeService
+
+    __init__()
+
+    upsert_fact_memory()
+
+    search_fact_memory()
+
+    delete_namespace()
+
+
+
+Step 4
+services/
+    prototype_classifier.py
+
+    class PrototypeClassifier:
+
+    def needs_memory()
+
+    def _embed_query()
+
+    def _compute_similarity()
+
+
+Step 5
+services/
+
+long_term_memory_service.py
+
+    class LongTermMemoryService
+
+    load past fact table from redis
+
+    convert to vector 
+    
+    push to pinecone 
+
+
+
+
